@@ -1,0 +1,108 @@
+PYTHON ENV
+python3 -m venv .venv
+or
+python3 -m venv .venv --prompt $(basename $(pwd))
+source .venv/bin/activate
+
+
+USING UV
+uv init
+uv venv
+source .venv/bin/activate
+uv add fastapi "uvicorn[standard]"
+uv add requirements.txt (if have the requirements.txt file which i actually dont have though) 
+uv lock
+uv sync
+uv sync --locked (to sync keeping the version)
+uv run uvicorn app.main:app --reload
+
+
+USING UV REFINED, SHORTENED
+uv init
+uv venv
+source .venv/bin/activate
+uv add fastapi "uvicorn[standard]"
+uv run uvicorn app.main:app --reload
+uv sync
+
+
+
+
+REQUIREMENTS using pip requirements.txt
+pip install "fastapi[standard]"
+pip install -r requirements.txt
+pip freeze > requirements.txt
+
+
+
+
+RUNNING FASTAPI
+uvicorn main:app --reload
+fastapi dev main.py
+fastapi run (for production)
+
+RUN USING UV
+uv run uvicorn app.main:app --reload
+
+
+
+
+POSTGRESSQL
+brew services list
+brew services start postgresql
+
+psql -U mac -d postgres; (i.e connect to postgresql using with default user, 'mac' the username of the machine)
+
+CREATE DATABASE myTestDb;
+CREATE ROLE userMe WITH LOGIN PASSWORD 'myDbPassword';
+GRANT ALL PRIVILEGES ON DATABASE myTestDb TO userMe;
+
+\l (list databases)
+\du (list users)
+\c postgres (connect to postgres or any other db name)
+\dt (list tables)
+
+MIGRATIONS WITH ALEMBIC
+uv add alembic
+alembic init alembic
+alembic revision --autogenerate -m "Initial migration"
+alembic upgrade head
+
+# testing
+alembic revision --autogenerate -m "test"
+
+
+# Drop a db and clean to restart afresh
+
+# First terminate the connection to the database
+psql -U mac -d postgres; (first connect to postgres database)
+\c postgres (connect to postgres (default) database before running the following to terminate connections to the mytestdb database)
+
+SELECT pg_terminate_backend(pg_stat_activity.pid)
+FROM pg_stat_activity
+WHERE pg_stat_activity.datname = 'mytestdb'
+AND pid <> pg_backend_pid();
+
+
+# Then drop the database
+psql -U mac -d postgres -c "DROP DATABASE IF EXISTS mytestdb;"
+psql -U mac -d postgres -c "CREATE DATABASE mytestdb OWNER mac;"
+
+rm -f alembic/versions/*.py
+alembic revision --autogenerate -m "initial migration"
+alembic upgrade head
+
+# Or delete and recreate the versions directory
+
+rm -rf alembic/versions
+mkdir alembic/versions
+touch alembic/versions/__init__.py
+
+or use the script cleandb.sh 
+chmod +x cleandb.sh
+./cleandb.sh
+
+JWT SECTRET GENERATION
+python -c "import secrets; print(secrets.token_urlsafe(32))"
+
+
