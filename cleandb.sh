@@ -47,17 +47,17 @@ echo "Removing old Alembic migration files..."
 echo "========================================================\n"
 find alembic/versions -type f -name "*.py" ! -name "__init__.py" -delete || true
 
-# Cleaning the cache from alembic
-echo "\n========================================================"
-echo "Cleaning the cache from alembic..."
-echo "========================================================\n"
-find alembic -type d -name "__pycache__" -exec rm -rf {} +
+# # Cleaning the cache from alembic
+# echo "\n========================================================"
+# echo "Cleaning the cache from alembic..."
+# echo "========================================================\n"
+# find alembic -type d -name "__pycache__" -exec rm -rf {} +
 
-# Cleaning the cache of the entire project
-echo "\n========================================================"
-echo "Cleaning the cache of the entire project..."
-echo "========================================================\n"
-find . -type d -name "__pycache__" -exec rm -rf {} +
+# # Cleaning the cache of the entire project
+# echo "\n========================================================"
+# echo "Cleaning the cache of the entire project..."
+# echo "========================================================\n"
+# find . -type d -name "__pycache__" -exec rm -rf {} +
 
 # Stamping the database with the base revision
 echo "\n========================================================"
